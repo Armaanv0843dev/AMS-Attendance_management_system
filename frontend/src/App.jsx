@@ -4,6 +4,7 @@
 // 1. Lazy loading: each page is now a separate JS chunk (better initial load time)
 // 2. AuthContext: session + user info shared via context (eliminates redundant
 //    supabase.auth.getSession() calls in Sidebar & Navbar)
+// 3. WakeupBanner: friendly notice when Render backend is cold-starting
 
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState, useMemo, lazy, Suspense } from "react";
@@ -11,9 +12,55 @@ import { supabase } from "./services/supabase";
 import { ToastProvider } from "./components/Toast";
 import { FullPageLoader } from "./components/Loader";
 import { AuthContext } from "./context/AuthContext";
+import { pingBackend } from "./services/wakeup";
 
 import Sidebar from "./components/Sidebar";
 import Navbar  from "./components/Navbar";
+
+/**
+ * WakeupBanner — Shows a friendly notice while Render's free-tier backend
+ * wakes from sleep (cold start can take 30–90 seconds).
+ * Auto-dismisses once the backend responds.
+ */
+function WakeupBanner() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    // Show banner after 2 seconds if backend hasn't responded yet
+    const timer = setTimeout(() => setVisible(true), 2000);
+    pingBackend().then(() => {
+      clearTimeout(timer);
+      setVisible(false);
+    });
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 9999,
+      background: "linear-gradient(90deg, #f59e0b, #d97706)",
+      color: "#1c1917",
+      padding: "10px 20px",
+      textAlign: "center",
+      fontSize: "0.875rem",
+      fontWeight: 600,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "8px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+    }}>
+      <span style={{ animation: "spin 1s linear infinite", display: "inline-block" }}>⚙️</span>
+      Server is waking up from sleep (Render free tier) — this may take up to 60 seconds…
+    </div>
+  );
+}
 
 // Lazy-loaded pages — each becomes its own JS chunk, reducing initial bundle size
 const Login      = lazy(() => import("./pages/Login"));
@@ -95,6 +142,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={authValue}>
       <ToastProvider>
+        <WakeupBanner />
         <BrowserRouter>
           <Routes>
             {/* Public routes (redirect to dashboard if already logged in) */}
