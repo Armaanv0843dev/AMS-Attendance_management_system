@@ -1,0 +1,165 @@
+# ============================================================
+#  AMS — Attendance Management System
+#  .gitignore — Root-level (covers both backend + frontend)
+# ============================================================
+
+# ============================================================
+#  SECRETS & ENVIRONMENT — NEVER commit these
+# ============================================================
+.env
+.env.*
+!.env.example          # .env.example IS committed (template)
+*.env
+
+# ============================================================
+#  PYTHON / BACKEND
+# ============================================================
+
+# Virtual environments
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+env/
+ENV/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+*.whl
+.installed.cfg
+lib/
+lib64/
+
+# ML model files — large binary, regenerated on first run
+# (Remove this line if you WANT to commit the pre-trained model)
+backend/ml/*.pkl
+
+# Pytest / test cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# mypy / pyright type checker
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# ============================================================
+#  NODE / FRONTEND (React + Vite)
+# ============================================================
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+frontend/dist-ssr/
+dist/
+dist-ssr/
+
+# Vite cache
+frontend/.vite/
+.vite/
+
+# Local env files (Vite)
+*.local
+frontend/.env.local
+frontend/.env.*.local
+
+# npm / yarn / pnpm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+package-lock.json.bak
+
+# ============================================================
+#  LOGS
+# ============================================================
+*.log
+logs/
+*.log.*
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ============================================================
+#  IDE / EDITOR
+# ============================================================
+
+# VS Code
+.vscode/
+!.vscode/extensions.json   # Keep recommended extensions list
+
+# JetBrains (PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+
+# Vim / Emacs swap files
+*.sw?
+*.swo
+*~
+*.orig
+
+# Sublime Text
+*.sublime-workspace
+
+# ============================================================
+#  OS GENERATED FILES
+# ============================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ============================================================
+#  MISC
+# ============================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Archive files (shouldn't be in repo)
+*.zip
+*.tar.gz
+*.rar
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# SQLite databases (if any local testing db)
+*.db
+*.sqlite
+*.sqlite3
